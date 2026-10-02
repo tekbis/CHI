@@ -4896,3 +4896,479 @@ h3 {
     padding-inline: 16px;
   }
 }
+
+/* ==========================================================================
+   v6 — performance, larger legible logo, animated review cards
+   ========================================================================== */
+
+:root {
+  --header-h: 121px;
+}
+
+/* --------------------------------------------------------------------------
+   1. RESPONSIVENESS / PAINT COST
+   Nineteen stacked backdrop-filter layers forced a full-width blur repaint on
+   every scroll frame, which made taps and in-page navigation feel laggy.
+   The backgrounds beneath them were already near-opaque, so the blur is
+   dropped and the few genuinely translucent panels are nudged up instead.
+   -------------------------------------------------------------------------- */
+.site-header,
+.site-header.scrolled,
+.site-header.solid-header,
+.limelight-nav,
+.trust-icon,
+.button-ghost,
+.button-white,
+.header-panel,
+.quick-booking-form,
+.schedule-hero-proof,
+.service-preview,
+.report-photo-label,
+.map-legend,
+.preview-tag,
+.hero-slider-dots,
+.phone-card,
+.area-status,
+.mobile-call-bar,
+.footer-top,
+.trust-strip,
+[class*="card"],
+[class*="panel"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Compensate the handful of panels that were relying on blur for legibility */
+.site-header,
+.site-header.scrolled,
+.site-header.solid-header {
+  background: #05172b;
+}
+
+.limelight-nav {
+  background: rgba(2, 16, 31, 0.86);
+}
+
+.button-white {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.quick-booking-form {
+  background: rgba(255, 255, 255, 0.13);
+}
+
+/* NOTE: the header must NOT get `transform`, `will-change: transform`,
+   `contain: layout` or `contain: paint`. The mobile nav panel is
+   position:fixed inside it, and every one of those makes the header a
+   containing block (or clips it), collapsing the panel to a thin strip.
+   Dropping the backdrop-filter above is what actually removes the cost. */
+
+/* JS drives anchor scrolling at a fixed, snappy duration so a jump from the
+   footer to the hero no longer takes several seconds. */
+html {
+  scroll-behavior: auto;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+/* Decorative loops are paused while their section is off-screen, so idle
+   sections stop consuming frames. */
+.anim-idle .map-scan,
+.anim-idle .map-routes,
+.anim-idle .map-routes path,
+.anim-idle .map-node,
+.anim-idle .map-node i,
+.anim-idle .hero-scan-line,
+.anim-idle .scan-beam,
+.anim-idle .orbit-one,
+.anim-idle .orbit-two,
+.anim-idle .hotspot-dot::after,
+.anim-idle .photo-pin::after,
+.anim-idle .live-dot {
+  animation-play-state: paused !important;
+}
+
+/* Immediate visual acknowledgement on tap, before navigation resolves. */
+.button:active,
+.limelight-nav a:active,
+.service-row:active,
+.area-pills button:active,
+.map-node:active {
+  transform: scale(0.975);
+}
+
+.button,
+.limelight-nav a {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.is-navigating {
+  cursor: progress;
+}
+
+
+/* --------------------------------------------------------------------------
+   2. LOGO — larger, so the "Comprehensive Home Inspections" wordmark reads
+   -------------------------------------------------------------------------- */
+.header-main,
+.site-header.scrolled .header-main {
+  min-height: 124px;
+  gap: 18px;
+}
+
+.brand,
+.brand-image-wrap {
+  max-height: 116px;
+}
+
+.brand-image-wrap,
+.site-header.scrolled .brand-image-wrap {
+  width: 122px;
+  height: 116px;
+  overflow: visible;
+}
+
+.brand-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.brand:hover .brand-image-wrap img {
+  transform: scale(1.04);
+}
+
+.footer-brand img {
+  width: auto;
+  height: 112px;
+  max-width: 124px;
+  object-fit: contain;
+}
+
+/* Mobile menu panel tracks the real header height instead of a fixed offset */
+@media (max-width: 980px) {
+  /* Fully opaque: the panel previously leaned on a backdrop blur to hide the
+     hero behind it, so with the blur gone the last 1% showed through crisply. */
+  .header-panel {
+    top: var(--header-h);
+    background: #04162b;
+  }
+
+  .header-main,
+  .site-header.scrolled .header-main {
+    min-height: 100px;
+  }
+
+  .brand,
+  .brand-image-wrap {
+    max-height: 92px;
+  }
+
+  .brand-image-wrap,
+  .site-header.scrolled .brand-image-wrap {
+    width: 97px;
+    height: 92px;
+  }
+
+  .schedule-main {
+    padding-top: var(--header-h);
+  }
+}
+
+@media (max-width: 700px) {
+  .site-header,
+  .site-header.scrolled,
+  .site-header.solid-header,
+  .header-main,
+  .site-header.scrolled .header-main {
+    min-height: 86px;
+  }
+
+  .brand,
+  .brand-image-wrap {
+    max-height: 78px;
+  }
+
+  .brand-image-wrap,
+  .site-header.scrolled .brand-image-wrap {
+    width: 83px;
+    height: 78px;
+  }
+
+  .footer-brand img {
+    height: 88px;
+    max-width: 98px;
+  }
+
+  .hero-stage {
+    padding-top: 132px;
+  }
+
+  .schedule-main {
+    padding-top: var(--header-h);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. CLIENT REVIEWS — animated colour on hover
+   -------------------------------------------------------------------------- */
+.reviews-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.reviews-grid {
+  gap: 22px;
+}
+
+.review-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: #ffffff;
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease;
+}
+
+/* Accent bar that wipes across the top */
+.review-card::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--blue), var(--cyan), var(--lime));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Soft colour wash that rises from the bottom of the card */
+.review-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 108%, rgba(157, 255, 28, 0.2), transparent 52%),
+    radial-gradient(circle at 92% -8%, rgba(8, 120, 249, 0.16), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.review-card:hover,
+.review-card:focus-within {
+  transform: translateY(-9px);
+  border-color: rgba(8, 120, 249, 0.42);
+  box-shadow: 0 26px 60px rgba(8, 120, 249, 0.18);
+}
+
+.review-card:hover::before,
+.review-card:focus-within::before {
+  transform: scaleX(1);
+}
+
+.review-card:hover::after,
+.review-card:focus-within::after {
+  opacity: 1;
+}
+
+/* Stars shift from lime to blue and lift one after another */
+.review-stars {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--lime-deep), var(--lime), var(--cyan), var(--blue));
+  background-size: 300% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.12rem;
+  transition: background-position 0.65s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.review-card:hover .review-stars,
+.review-card:focus-within .review-stars {
+  background-position: 100% 50%;
+  transform: translateY(-2px) scale(1.06);
+}
+
+.review-card blockquote {
+  transition: color 0.35s ease;
+}
+
+.review-card:hover blockquote,
+.review-card:focus-within blockquote {
+  color: #061c33;
+}
+
+/* Attribution line picks up the brand blue with an underline that grows in */
+.review-card > p {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 6px;
+  transition: color 0.35s ease;
+}
+
+.review-card > p::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--lime));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.06s;
+}
+
+.review-card:hover > p,
+.review-card:focus-within > p {
+  color: var(--blue-deep);
+}
+
+.review-card:hover > p::after,
+.review-card:focus-within > p::after {
+  transform: scaleX(1);
+}
+
+/* Staggered entrance so the three cards animate in sequence */
+.reviews-grid .review-card:nth-child(1) { transition-delay: 0s; }
+.reviews-grid .review-card:nth-child(2) { transition-delay: 0.05s; }
+.reviews-grid .review-card:nth-child(3) { transition-delay: 0.1s; }
+
+@media (hover: none) {
+  .review-card::before { transform: scaleX(1); }
+  .review-card::after { opacity: 0.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .review-card,
+  .review-card::before,
+  .review-card::after,
+  .review-stars,
+  .review-card > p::after,
+  .brand-image-wrap img {
+    transition: none !important;
+  }
+
+  .review-card:hover,
+  .review-card:focus-within {
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. MOBILE TOUCH TARGETS
+   Several controls rendered below the 44px minimum recommended for touch.
+   These rules grow the *hit area* without changing the visual size, so the
+   design is untouched while the controls stop being fiddly to tap.
+   -------------------------------------------------------------------------- */
+@media (max-width: 980px) {
+  /* Hero slider dots were 10x10. Keep the dot, extend the tappable box. */
+  .hero-slider-dots {
+    gap: 4px;
+  }
+
+  .hero-slider-dots button {
+    position: relative;
+  }
+
+  .hero-slider-dots button::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Region pills and map nodes: 40px / 34px -> 44px */
+  .area-pills button,
+  .booking-map .area-pills button {
+    min-height: 44px;
+  }
+
+  .map-node {
+    min-height: 42px;
+  }
+
+  /* Inline text links sat at ~20-23px tall. */
+  .site-footer a:not(.button),
+  .back-link,
+  .text-link,
+  .service-preview-copy a,
+  .footer-bottom a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+  }
+
+  .site-footer > .container > div > a:not(.button) {
+    min-height: 42px;
+  }
+
+  .booking-contact-card a,
+  .faq-intro .phone-card {
+    min-height: 44px;
+  }
+
+  /* Anything interactive gets a comfortable minimum. */
+  .limelight-nav a,
+  .service-row,
+  .faq-list summary {
+    min-height: 48px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. MOBILE FORMS
+   iOS Safari zooms the viewport whenever a focused field is under 16px, and
+   frequently does not zoom back out. Every field was 11-14px, so both forms
+   are bumped to 16px on touch widths. Labels keep their smaller size.
+   -------------------------------------------------------------------------- */
+@media (max-width: 980px) {
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="date"],
+  input[type="number"],
+  input[type="search"],
+  select,
+  textarea,
+  .booking-form select,
+  .booking-form textarea,
+  .booking-form input,
+  .quick-booking-form input,
+  .quick-booking-form select {
+    /* !important: existing rules set these at higher specificity, and on iOS a
+       sub-16px field forces a viewport zoom that does not reverse. */
+    font-size: 16px !important;
+  }
+
+  /* Comfortable height for thumbs on both forms. */
+  .quick-booking-form input,
+  .booking-form input,
+  .booking-form select,
+  .quick-booking-form select {
+    min-height: 52px;
+  }
+
+  .service-check {
+    min-height: 48px;
+  }
+
+  /* Native date/time controls otherwise render cramped on iOS. */
+  input[type="date"],
+  input[type="time"] {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+}

@@ -10,7 +10,13 @@
     <meta name="theme-color" content="#071d36" />
     <title>CHI Comprehensive Home Inspections</title>
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="preload" as="image" href="assets/chi-logo-header.webp" />
+    <link rel="preload" as="image" href="assets/hero-maryland-v3.webp" fetchpriority="high" />
     <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="prefetch" href="schedule/" as="document" />
+    <script src="assets/cms-config.js" defer></script>
+    <script src="assets/cms-map.js" defer></script>
+    <script src="assets/cms.js" defer></script>
     <script src="assets/app.js" defer></script>
   </head>
   <body data-page="home">
@@ -27,7 +33,7 @@
       </div>
       <div class="container header-main">
         <a class="brand" href="./" aria-label="CHI Comprehensive Home Inspections home">
-          <span class="brand-image-wrap"><img src="assets/chi-logo-transparent-v2.webp" alt="CHI Comprehensive Home Inspections" /></span>
+          <span class="brand-image-wrap"><img src="assets/chi-logo-header.webp" alt="CHI Comprehensive Home Inspections" width="420" height="406" fetchpriority="high" decoding="async" /></span>
         </a>
 
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
@@ -58,9 +64,9 @@
       <section class="inspection-hero" id="home" data-hero-slider aria-label="Comprehensive home inspection introduction">
         <div class="hero-slides" aria-hidden="true">
           <img class="hero-slide active" src="assets/hero-maryland-v3.webp" alt="" fetchpriority="high" data-hero-slide />
-          <img class="hero-slide" src="assets/hero-interior-living-v4.webp" alt="" data-hero-slide />
-          <img class="hero-slide" src="assets/hero-dc-v3.webp" alt="" data-hero-slide />
-          <img class="hero-slide" src="assets/hero-interior-kitchen-v4.webp" alt="" data-hero-slide />
+          <img class="hero-slide" src="assets/hero-interior-living-v4.webp" alt="" decoding="async" fetchpriority="low" data-hero-slide />
+          <img class="hero-slide" src="assets/hero-dc-v3.webp" alt="" decoding="async" fetchpriority="low" data-hero-slide />
+          <img class="hero-slide" src="assets/hero-interior-kitchen-v4.webp" alt="" decoding="async" fetchpriority="low" data-hero-slide />
         </div>
         <div class="hero-shade" aria-hidden="true"></div>
         <div class="container hero-stage">
@@ -90,6 +96,25 @@
           <div><span class="trust-icon"><b>07</b><small>days</small></span><p><strong>Appointments all week</strong><small>Flexible scheduling for tight real estate timelines.</small></p></div>
           <div><span class="trust-icon"><b>25+</b><small>years</small></span><p><strong>Experienced guidance</strong><small>Seasoned insight across homes, systems and property conditions.</small></p></div>
           <div><span class="trust-icon"><b>E&amp;O</b><small>insured</small></span><p><strong>Professional coverage</strong><small>Errors and omissions insurance for added confidence.</small></p></div>
+        </div>
+      </section>
+
+      <section class="quick-booking" id="contact">
+        <div class="container quick-booking-grid">
+          <div class="quick-booking-copy reveal">
+            <p class="eyebrow light"><span></span> Book an inspection</p>
+            <h2>Tell us about the property.</h2>
+            <p>Start with the essentials. You can confirm services and timing on the next page.</p>
+            <a href="tel:+13017886608"><span>Prefer to call?</span><strong>301-788-6608</strong></a>
+          </div>
+          <form class="quick-booking-form reveal" action="schedule/" method="get">
+            <label>First name<input type="text" name="firstName" autocomplete="given-name" required placeholder="First name" /></label>
+            <label>Phone number<input type="tel" name="phone" autocomplete="tel" required placeholder="(301) 555-0123" /></label>
+            <label class="quick-field-wide">Property address<input type="text" name="address" autocomplete="street-address" required placeholder="Street address" /></label>
+            <label>Preferred date<input type="date" name="preferredDate" /></label>
+            <button class="button button-lime button-large" type="submit">Continue to book inspection <span>→</span></button>
+            <p class="quick-form-note">No payment is required to request an appointment.</p>
+          </form>
         </div>
       </section>
 
@@ -338,11 +363,14 @@
         </div>
       </section>
 
-      <section class="section faq-section">
+      
+
+      
+      <section class="section faq-section" id="faq">
         <div class="container faq-grid">
           <div class="faq-intro reveal">
-            <p class="eyebrow"><span></span> Common questions</p>
-            <h2>Plan your inspection with confidence.</h2>
+            <p class="eyebrow"><span></span> FAQ</p>
+            <h2>Frequently asked questions.</h2>
             <p>Have a question about a property or service? Call and speak directly with the inspection team.</p>
             <a class="phone-card" href="tel:+13017886608"><span>Call today</span><strong>301-788-6608</strong><i>→</i></a>
           </div>
@@ -370,38 +398,19 @@
           </div>
         </div>
       </section>
-
-      <section class="quick-booking" id="contact">
-        <div class="container quick-booking-grid">
-          <div class="quick-booking-copy reveal">
-            <p class="eyebrow light"><span></span> Book an inspection</p>
-            <h2>Tell us about the property.</h2>
-            <p>Start with the essentials. You can confirm services and timing on the next page.</p>
-            <a href="tel:+13017886608"><span>Prefer to call?</span><strong>301-788-6608</strong></a>
-          </div>
-          <form class="quick-booking-form reveal" action="schedule/" method="get">
-            <label>First name<input type="text" name="firstName" autocomplete="given-name" required placeholder="First name" /></label>
-            <label>Phone number<input type="tel" name="phone" autocomplete="tel" required placeholder="(301) 555-0123" /></label>
-            <label class="quick-field-wide">Property address<input type="text" name="address" autocomplete="street-address" required placeholder="Street address" /></label>
-            <label>Preferred date<input type="date" name="preferredDate" /></label>
-            <button class="button button-lime button-large" type="submit">Continue to book inspection <span>→</span></button>
-            <p class="quick-form-note">No payment is required to request an appointment.</p>
-          </form>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">
       <div class="container footer-top">
         <div class="footer-brand">
-          <img src="assets/chi-logo-transparent-v2.webp" alt="CHI Comprehensive Home Inspections" loading="lazy" />
+          <img src="assets/chi-logo-header.webp" alt="CHI Comprehensive Home Inspections" width="420" height="406" loading="lazy" decoding="async" />
           <p>Clear findings, modern tools and experienced guidance for buyers, sellers and real estate professionals.</p>
         </div>
         <div><h3>Services</h3><a href="#services">Home inspections</a><a href="#services">Radon testing</a><a href="#services">Mold &amp; water testing</a><a href="#services">Termite &amp; thermal</a></div>
         <div><h3>Service area</h3><a href="#service-area">Maryland</a><a href="#service-area">Pennsylvania</a><a href="#service-area">Washington, DC</a><a href="#service-area">West Virginia</a></div>
         <div class="footer-contact"><h3>Schedule</h3><a class="footer-phone" href="tel:+13017886608">301-788-6608</a><p>Available 7 days a week</p><a class="button button-primary" href="schedule/">Request online</a></div>
       </div>
-      <div class="container footer-bottom"><p>© <span data-year></span> CHI Comprehensive Home Inspections. All rights reserved.</p><p>Fast · Trusted · Accurate</p></div>
+      <div class="container footer-bottom"><p>© <span data-year></span> CHI Comprehensive Home Inspections. All rights reserved.</p><a href="/admin">Dashboard</a><p>Fast · Trusted · Accurate</p></div>
     </footer>
 
     <a class="mobile-call-bar" href="tel:+13017886608"><span>Call CHI</span><strong>301-788-6608</strong></a>

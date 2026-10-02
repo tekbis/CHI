@@ -55,6 +55,48 @@
     wv: "West Virginia"
   };
 
+  /* ---------------------------------------------------------------- CMS
+     Service panel copy and region names live here rather than in the HTML,
+     so the dashboard overrides them through this hook. The objects are
+     mutated in place (never reassigned) because the closures below already
+     hold references to them. Anything the CMS does not supply keeps the
+     built-in value, so the page still works with no CMS at all. */
+  const contentHooks = [];
+  let regionLabelPrefix = "Serving";
+
+  const applyCmsContent = (content) => {
+    if (!content) return;
+
+    const items = content.services && content.services.items;
+    if (items) {
+      Object.keys(items).forEach((key) => {
+        const target = serviceContent[key];
+        const source = items[key];
+        if (!target || !source) return;
+        if (source.kicker !== undefined) target.kicker = source.kicker;
+        if (source.panelTitle !== undefined) target.title = source.panelTitle;
+        if (source.copy !== undefined) target.copy = source.copy;
+        if (source.alt !== undefined) target.alt = source.alt;
+        if (Array.isArray(source.points)) target.points = source.points;
+      });
+    }
+
+    if (content.area && content.area.statusPrefix !== undefined) {
+      regionLabelPrefix = content.area.statusPrefix;
+    }
+
+    const regions = content.area && content.area.regions;
+    if (regions) {
+      Object.keys(regions).forEach((key) => {
+        if (regions[key] && regions[key].name) regionNames[key] = regions[key].name;
+      });
+    }
+
+    contentHooks.forEach((hook) => {
+      try { hook(); } catch (error) { /* one bad hook must not stop the rest */ }
+    });
+  };
+
   const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({
     "&": "&amp;",
     "<": "&lt;",
@@ -74,9 +116,32 @@
     const toggle = document.querySelector(".menu-toggle");
     if (!header) return;
 
-    const updateHeader = () => header.classList.toggle("scrolled", window.scrollY > 28);
+    // Publish the real header height so scroll-padding and the mobile nav
+    // panel stay correct no matter what size the logo is rendered at.
+    const publishHeight = () => {
+      document.documentElement.style.setProperty("--header-h", `${Math.round(header.offsetHeight)}px`);
+    };
+    publishHeight();
+    window.addEventListener("resize", publishHeight, { passive: true });
+    window.addEventListener("load", publishHeight);
+
+    // The old handler ran classList work on every single scroll event. Now it
+    // is coalesced into one rAF tick and only touches the DOM on real changes.
+    let scrolled = null;
+    let ticking = false;
+    const updateHeader = () => {
+      ticking = false;
+      const next = window.scrollY > 28;
+      if (next === scrolled) return;
+      scrolled = next;
+      header.classList.toggle("scrolled", next);
+    };
     updateHeader();
-    window.addEventListener("scroll", updateHeader, { passive: true });
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(updateHeader);
+    }, { passive: true });
 
     if (toggle) {
       toggle.addEventListener("click", () => {
@@ -131,6 +196,154 @@
     });
   };
 
+  /* ------------------------------------------------------------------
+     Fast in-page navigation.
+     CSS `scroll-behavior: smooth` animated at a browser-chosen speed that
+     scaled with distance, so a jump from the footer to the hero crawled.
+     This runs a fixed, short animation instead and cancels on user input.
+     ------------------------------------------------------------------ */
+  const initFastAnchors = () => {
+    const headerOffset = () => {
+      const header = document.querySelector("[data-header]");
+      return (header ? header.offsetHeight : 0) + 16;
+    };
+
+    let animation = null;
+
+    const cancel = () => {
+      if (animation) {
+        cancelAnimationFrame(animation);
+        animation = null;
+      }
+    };
+
+    ["wheel", "touchstart", "keydown"].forEach((type) => {
+      window.addEventListener(type, cancel, { passive: true });
+    });
+
+    const scrollToTarget = (target) => {
+      const start = window.scrollY;
+      const end = Math.max(0, start + target.getBoundingClientRect().top - headerOffset());
+      const distance = end - start;
+
+      if (reduceMotion || Math.abs(distance) < 2) {
+        window.scrollTo(0, end);
+        return;
+      }
+
+      // Short and roughly constant: long jumps no longer feel like a crawl.
+      const duration = Math.min(520, Math.max(280, Math.abs(distance) / 3));
+      const began = performance.now();
+      cancel();
+
+      const step = (now) => {
+        const progress = Math.min(1, (now - began) / duration);
+        const eased = progress < 0.5
+          ? 4 * progress * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        window.scrollTo(0, start + distance * eased);
+        animation = progress < 1 ? requestAnimationFrame(step) : null;
+      };
+
+      animation = requestAnimationFrame(step);
+    };
+
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest('a[href*="#"]');
+      if (!link || link.target === "_blank" || event.metaKey || event.ctrlKey || event.shiftKey) return;
+
+      const url = new URL(link.href, window.location.href);
+      if (url.pathname !== window.location.pathname || url.origin !== window.location.origin) return;
+
+      const id = url.hash.slice(1);
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+
+      event.preventDefault();
+      document.body.classList.remove("menu-open");
+      document.querySelector(".menu-toggle")?.setAttribute("aria-expanded", "false");
+      scrollToTarget(target);
+      history.pushState(null, "", url.hash);
+    });
+  };
+
+  /* ------------------------------------------------------------------
+     Warm the scheduling page the moment a visitor shows intent, so
+     "Book inspection" navigates against a primed cache.
+     ------------------------------------------------------------------ */
+  const initLinkWarmup = () => {
+    const warmed = new Set();
+
+    const warm = (href) => {
+      if (!href || warmed.has(href)) return;
+      warmed.add(href);
+      const hint = document.createElement("link");
+      hint.rel = "prefetch";
+      hint.as = "document";
+      hint.href = href;
+      document.head.appendChild(hint);
+    };
+
+    const candidate = (event) => {
+      const link = event.target.closest("a[href]");
+      if (!link) return;
+      const url = new URL(link.href, window.location.href);
+      if (url.origin !== window.location.origin || url.pathname === window.location.pathname) return;
+      warm(url.href);
+    };
+
+    document.addEventListener("pointerover", candidate, { passive: true });
+    document.addEventListener("touchstart", candidate, { passive: true });
+
+    // Give the click somewhere to land visually while the next page loads.
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest("a[href]");
+      if (!link || link.getAttribute("href")?.startsWith("#") || link.href.startsWith("tel:")) return;
+      const url = new URL(link.href, window.location.href);
+      if (url.origin !== window.location.origin || url.hash) return;
+      document.body.classList.add("is-navigating");
+    });
+
+    window.addEventListener("pageshow", () => document.body.classList.remove("is-navigating"));
+  };
+
+  /* ------------------------------------------------------------------
+     Pause the decorative infinite loops (map scan, orbits, pulses) while
+     their section is off-screen instead of burning frames all the time.
+     ------------------------------------------------------------------ */
+  const initAnimationBudget = () => {
+    if (!("IntersectionObserver" in window)) return;
+
+    const zones = document.querySelectorAll(
+      ".area-section, .report-section, .inspection-hero, .why-section, .schedule-hero"
+    );
+    if (!zones.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle("anim-idle", !entry.isIntersecting);
+      });
+    }, { rootMargin: "120px 0px" });
+
+    zones.forEach((zone) => {
+      zone.classList.add("anim-idle");
+      observer.observe(zone);
+    });
+  };
+
+  /* Rows the CMS rebuilds (reviews, FAQ) are created after initReveal has
+     already picked its elements, so they need to be handed to the observer
+     or they would never fade in. */
+  let revealObserver = null;
+  const observeReveal = (elements) => {
+    [...elements].forEach((el) => {
+      if (!el.classList.contains("reveal")) return;
+      if (revealObserver) revealObserver.observe(el);
+      else el.classList.add("is-visible");
+    });
+  };
+
   const initReveal = () => {
     const items = document.querySelectorAll(".reveal");
     if (!items.length) return;
@@ -149,6 +362,7 @@
       });
     }, { threshold: 0.13, rootMargin: "0px 0px -45px" });
 
+    revealObserver = observer;
     items.forEach((item) => observer.observe(item));
   };
 
@@ -229,6 +443,13 @@
       if (previewPoints) previewPoints.innerHTML = content.points.map((point) => `<li>${point}</li>`).join("");
     };
 
+    /* Re-render the open panel when the CMS delivers new copy. */
+    contentHooks.push(() => {
+      const row = activeRow;
+      activeRow = null;
+      activate(row);
+    });
+
     rows.forEach((row) => {
       row.addEventListener("pointerenter", () => activate(row));
       row.addEventListener("focus", () => activate(row));
@@ -250,8 +471,13 @@
       node.classList.toggle("active", node.dataset.region === region);
     });
     document.querySelectorAll("[data-region-label]").forEach((node) => {
-      const suffix = node.closest(".booking-map") ? " selected" : "";
-      node.textContent = `${regionNames[region]}${suffix}`;
+      const inBooking = node.closest(".booking-map");
+      /* The homepage status line reads "Serving Maryland"; the booking page
+         reads "Maryland selected". Without the prefix here, re-rendering the
+         label would quietly drop the word the markup ships with. */
+      const prefix = inBooking || !regionLabelPrefix ? "" : regionLabelPrefix + " ";
+      const suffix = inBooking ? " selected" : "";
+      node.textContent = `${prefix}${regionNames[region]}${suffix}`;
     });
 
     const select = document.querySelector("[data-state-select]");
@@ -263,6 +489,12 @@
   const initRegionMaps = () => {
     document.querySelectorAll("[data-region]").forEach((control) => {
       control.addEventListener("click", () => setRegion(control.dataset.region));
+    });
+
+    /* Re-apply the selected region when the CMS renames one. */
+    contentHooks.push(() => {
+      const active = document.querySelector(".area-pills button.active, .map-node.active");
+      if (active && active.dataset.region) setRegion(active.dataset.region);
     });
 
     const select = document.querySelector("[data-state-select]");
@@ -356,6 +588,8 @@
   const initFaq = () => {
     const details = [...document.querySelectorAll(".faq-list details")];
     details.forEach((item) => {
+      if (item.dataset.faqBound) return;
+      item.dataset.faqBound = "1";
       item.addEventListener("toggle", () => {
         if (!item.open) return;
         details.forEach((other) => {
@@ -438,6 +672,9 @@
 
   setYears();
   initHeader();
+  initFastAnchors();
+  initLinkWarmup();
+  initAnimationBudget();
   initLimelightNav();
   initReveal();
   initHero();
@@ -446,4 +683,17 @@
   initBookingForm();
   initFaq();
   initWebMcp();
+
+  /* Content that cms.js cached locally is already on window before this file
+     runs (both scripts are deferred, which preserves document order), so the
+     first paint uses it. refreshContent is what cms.js calls once the live
+     copy arrives from Supabase, and what the dashboard calls while previewing. */
+  applyCmsContent(window.CHI_CONTENT);
+
+  window.CHI = window.CHI || {};
+  window.CHI.refreshContent = applyCmsContent;
+  /* cms.js calls this after it rebuilds the FAQ rows from the CMS, so the
+     one-open-at-a-time accordion keeps working on the new markup. */
+  window.CHI.rebindFaq = initFaq;
+  window.CHI.observeReveal = observeReveal;
 })();

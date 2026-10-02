@@ -1,0 +1,348 @@
+{
+  "business": {
+    "phone": "301-788-6608",
+    "phoneHref": "tel:+13017886608",
+    "logo": "assets/chi-logo-header.webp",
+    "utility1": "Serving MD · PA · DC · WV",
+    "utility2": "Reports within 24 hours",
+    "utility3": "Available 7 days a week",
+    "utility4": "Fast · Trusted · Accurate",
+    "callButton": "Call us",
+    "mobileBarLabel": "Call CHI"
+  },
+  "seo": {
+    "title": "CHI Comprehensive Home Inspections",
+    "description": "CHI Comprehensive Home Inspections provides detailed home inspections, radon, mold, water, termite and thermal services across Maryland, Pennsylvania, DC and West Virginia."
+  },
+  "hero": {
+    "overline": "Serving MD · PA · DC · WV",
+    "title": "Protect the property. <em>Make the right move.</em>",
+    "subline": "For buyers, sellers and homeowners.",
+    "lede": "Trusted home inspection experts delivering detailed findings, clear photos and a practical digital report before your next property decision.",
+    "btnPrimary": "Book inspection",
+    "btnSecondary": "View services",
+    "slide1": "assets/hero-maryland-v3.webp",
+    "slide2": "assets/hero-interior-living-v4.webp",
+    "slide3": "assets/hero-dc-v3.webp",
+    "slide4": "assets/hero-interior-kitchen-v4.webp"
+  },
+  "trust": {
+    "0": {
+      "big": "24h",
+      "small": "report",
+      "title": "24-hour turnaround",
+      "desc": "Clear color photos and practical findings delivered fast."
+    },
+    "1": {
+      "big": "07",
+      "small": "days",
+      "title": "Appointments all week",
+      "desc": "Flexible scheduling for tight real estate timelines."
+    },
+    "2": {
+      "big": "25+",
+      "small": "years",
+      "title": "Experienced guidance",
+      "desc": "Seasoned insight across homes, systems and property conditions."
+    },
+    "3": {
+      "big": "E&O",
+      "small": "insured",
+      "title": "Professional coverage",
+      "desc": "Errors and omissions insurance for added confidence."
+    }
+  },
+  "booking": {
+    "eyebrow": "Book an inspection",
+    "title": "Tell us about the property.",
+    "text": "Start with the essentials. You can confirm services and timing on the next page.",
+    "callLabel": "Prefer to call?",
+    "note": "No payment is required to request an appointment."
+  },
+  "services": {
+    "eyebrow": "Inspection services",
+    "title": "One visit. A clearer picture of the property.",
+    "intro": "Choose a service to see how CHI helps buyers, sellers and real estate professionals understand the home before the next decision.",
+    "items": {
+      "home": {
+        "title": "Comprehensive home inspection",
+        "desc": "Roof, exterior, structure, interior and major systems",
+        "image": "assets/service-home-v4.webp",
+        "kicker": "Complete property view",
+        "panelTitle": "Comprehensive home inspection",
+        "copy": "A complete system-by-system evaluation using modern tools, color photos and a clear digital report.",
+        "points": [
+          "Roof to foundation",
+          "Major systems & safety",
+          "Clear digital report"
+        ],
+        "alt": "CHI inspector pointing out a home's roof and exterior details"
+      },
+      "radon": {
+        "title": "Radon testing",
+        "desc": "Professional monitoring with clear, non-alarming results",
+        "image": "assets/service-radon-v2.webp",
+        "kicker": "Measure what you cannot see",
+        "panelTitle": "Radon testing",
+        "copy": "Professional monitoring provides clear results and practical context for an invisible concern that cannot be judged by sight or smell.",
+        "points": [
+          "Modern monitoring equipment",
+          "Easy-to-read results",
+          "Coordinated with your inspection"
+        ],
+        "alt": "CHI inspector setting up a radon monitor in a finished basement"
+      },
+      "mold": {
+        "title": "Mold & moisture testing",
+        "desc": "Targeted evaluation of visible concerns and moisture-prone areas",
+        "image": "assets/service-mold-v2.webp",
+        "kicker": "Trace the source",
+        "panelTitle": "Mold & moisture testing",
+        "copy": "Targeted evaluation focuses on visible concerns, moisture-prone areas and conditions that may deserve closer attention.",
+        "points": [
+          "Moisture-meter screening",
+          "Concern-focused assessment",
+          "Photo documentation"
+        ],
+        "alt": "CHI inspector checking a bathroom wall with a moisture meter"
+      },
+      "water": {
+        "title": "Water quality testing",
+        "desc": "Practical testing options for private wells and household water",
+        "image": "assets/service-water-v2.webp",
+        "kicker": "Understand household water",
+        "panelTitle": "Water quality testing",
+        "copy": "Choose practical screening options for private wells and household water, coordinated with your property inspection.",
+        "points": [
+          "Convenient sample collection",
+          "Clear test options",
+          "Coordinated scheduling"
+        ],
+        "alt": "CHI inspector collecting a residential water sample at a kitchen faucet"
+      },
+      "termite": {
+        "title": "Termite inspection",
+        "desc": "Coordinated inspection from an experienced specialist",
+        "image": "assets/service-termite-v2.webp",
+        "kicker": "Specialist support",
+        "panelTitle": "Termite inspection",
+        "copy": "An experienced termite inspector evaluates accessible areas for visible evidence and conditions associated with wood-destroying insects.",
+        "points": [
+          "Specialist on staff",
+          "Visible evidence review",
+          "Combined appointment option"
+        ],
+        "alt": "CHI inspector checking a basement sill plate for termite evidence"
+      },
+      "thermal": {
+        "title": "Thermal imaging",
+        "desc": "Infrared tools help reveal temperature anomalies and hidden concerns",
+        "image": "assets/service-thermal-v2.webp",
+        "kicker": "Technology that adds perspective",
+        "panelTitle": "Thermal imaging",
+        "copy": "Infrared tools help identify temperature patterns that can guide a closer look at electrical, moisture or insulation concerns.",
+        "points": [
+          "Infrared scanning",
+          "Temperature anomaly review",
+          "Images in your report"
+        ],
+        "alt": "CHI inspector scanning an electrical panel with a thermal camera"
+      }
+    }
+  },
+  "gallery": {
+    "eyebrow": "Beyond the surface",
+    "title": "A closer look at the whole property.",
+    "intro": "CHI connects visible conditions with the systems and spaces that matter most.",
+    "cards": {
+      "0": {
+        "image": "assets/service-home-v3.webp",
+        "tag": "Exterior",
+        "title": "Roof, drainage & structure"
+      },
+      "1": {
+        "image": "assets/service-mold-v3.webp",
+        "tag": "Interior",
+        "title": "Moisture-prone areas"
+      },
+      "2": {
+        "image": "assets/service-thermal-v3.webp",
+        "tag": "Systems",
+        "title": "Infrared perspective"
+      }
+    }
+  },
+  "report": {
+    "image": "assets/service-thermal-v3.webp",
+    "labelKicker": "Modern inspection tools",
+    "labelTitle": "Infrared imaging adds another perspective.",
+    "labelText": "Temperature differences can help guide a closer look at electrical, insulation and moisture concerns.",
+    "eyebrow": "Reports made for real decisions",
+    "title": "See the issue. Understand the impact. Know what to do next.",
+    "text": "CHI documents findings with color photos and straightforward context. The goal is not to alarm you—it is to help you prioritize with confidence.",
+    "linkText": "Schedule a clear, comprehensive inspection",
+    "features": {
+      "0": {
+        "title": "Photo-first findings",
+        "text": "Every important observation is easier to locate and understand."
+      },
+      "1": {
+        "title": "Cloud-based access",
+        "text": "Open your report from your phone and share it with your agent when needed."
+      },
+      "2": {
+        "title": "Questions are welcome",
+        "text": "We walk through priorities and remain available after the inspection."
+      }
+    }
+  },
+  "why": {
+    "eyebrow": "The CHI difference",
+    "title": "Experienced guidance.<br>Clear information.",
+    "intro": "CHI combines decades of home inspection experience with modern equipment, clear communication and practical reporting.",
+    "bigNumber": "25+",
+    "bigLabel": "years",
+    "cards": {
+      "0": {
+        "title": "Experience that brings context",
+        "text": "Seasoned judgment helps connect individual findings to the broader condition of the property."
+      },
+      "1": {
+        "title": "Clear, non-alarming reports",
+        "text": "Plain-language findings, color photos and practical next steps."
+      },
+      "2": {
+        "title": "Seven-day availability",
+        "text": "Flexible scheduling for tight contract timelines and busy clients."
+      },
+      "3": {
+        "title": "Insured & well equipped",
+        "text": "Errors and omissions coverage, infrared cameras and specialized testing support."
+      }
+    }
+  },
+  "process": {
+    "eyebrow": "What to expect",
+    "title": "A straightforward inspection process.",
+    "btn": "Start with a request",
+    "steps": {
+      "0": {
+        "label": "Schedule",
+        "title": "Tell us about the property.",
+        "text": "Choose your services, location and preferred appointment time online or by phone."
+      },
+      "1": {
+        "label": "Inspect",
+        "title": "Walk the home with our team.",
+        "text": "We assess visible systems, document concerns and answer questions as we go."
+      },
+      "2": {
+        "label": "Review",
+        "title": "Receive a clear digital report.",
+        "text": "Use color photos and practical notes to understand priorities and make your next decision."
+      }
+    }
+  },
+  "reviews": {
+    "eyebrow": "Client experience",
+    "title": "Clear answers make a better inspection.",
+    "items": [
+      {
+        "stars": "★★★★★",
+        "quote": "“The findings were explained clearly, and the photos made it easy to understand what needed attention.”",
+        "author": "Homebuyer review"
+      },
+      {
+        "stars": "★★★★★",
+        "quote": "“Scheduling was straightforward, the inspection felt thorough, and every question was welcomed.”",
+        "author": "Homeowner review"
+      },
+      {
+        "stars": "★★★★★",
+        "quote": "“The report was organized, practical and easy to share during the real estate transaction.”",
+        "author": "Real estate professional review"
+      }
+    ]
+  },
+  "area": {
+    "eyebrow": "Local coverage, coordinated service",
+    "title": "Four regions. One trusted inspection team.",
+    "text": "CHI serves buyers, sellers, agents and homeowners throughout Maryland, Pennsylvania, Washington, DC and West Virginia.",
+    "statusSuffix": "· Call to confirm availability for your property.",
+    "btn": "Check your location",
+    "legend": "Scheduling across the region",
+    "regions": {
+      "md": {
+        "name": "Maryland",
+        "code": "MD",
+        "mapLabel": "Maryland"
+      },
+      "pa": {
+        "name": "Pennsylvania",
+        "code": "PA",
+        "mapLabel": "Pennsylvania"
+      },
+      "dc": {
+        "name": "Washington, DC",
+        "code": "DC",
+        "mapLabel": "Washington"
+      },
+      "wv": {
+        "name": "West Virginia",
+        "code": "WV",
+        "mapLabel": "West Virginia"
+      }
+    },
+    "statusPrefix": "Serving"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Frequently asked questions.",
+    "intro": "Have a question about a property or service? Call and speak directly with the inspection team.",
+    "callLabel": "Call today",
+    "items": [
+      {
+        "q": "How quickly will I receive my report?",
+        "a": "CHI provides a detailed digital report with color photos, clear explanations and practical next steps within 24 hours."
+      },
+      {
+        "q": "Can I add radon, mold or water testing?",
+        "a": "Yes. Add-on testing can be coordinated with your home inspection so you get a more complete picture in fewer appointments."
+      },
+      {
+        "q": "Should I attend the inspection?",
+        "a": "You are welcome to attend. It is a useful opportunity to see the home’s systems, ask questions and review the most important findings."
+      },
+      {
+        "q": "Do you work with real estate agents?",
+        "a": "Yes. CHI works with buyers, sellers and agents and can share the completed report with the people you authorize."
+      },
+      {
+        "q": "How do I confirm service at my address?",
+        "a": "Send the property address through the scheduling form or call 301-788-6608. We serve Maryland, Pennsylvania, DC and West Virginia."
+      }
+    ]
+  },
+  "footer": {
+    "blurb": "Clear findings, modern tools and experienced guidance for buyers, sellers and real estate professionals.",
+    "col1Title": "Services",
+    "col2Title": "Service area",
+    "scheduleTitle": "Schedule",
+    "availability": "Available 7 days a week",
+    "btn": "Request online",
+    "copyright": "CHI Comprehensive Home Inspections. All rights reserved.",
+    "tagline": "Fast · Trusted · Accurate",
+    "col1": {
+      "0": "Home inspections",
+      "1": "Radon testing",
+      "2": "Mold & water testing",
+      "3": "Termite & thermal"
+    },
+    "col2": {
+      "0": "Maryland",
+      "1": "Pennsylvania",
+      "2": "Washington, DC",
+      "3": "West Virginia"
+    }
+  }
+}

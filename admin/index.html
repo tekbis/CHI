@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <base href="/admin/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>CHI — Website Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="stylesheet" href="admin.css" />
+    <script src="../assets/cms-config.js" defer></script>
+    <script src="../assets/cms-map.js" defer></script>
+    <script src="admin.js" defer></script>
+  </head>
+  <body>
+    <!-- ------------------------------------------------------- login -->
+    <div class="login-screen" id="login">
+      <form class="login-card" id="login-form">
+        <img src="../assets/chi-logo-header.webp" alt="CHI" width="420" height="406" />
+        <h1>Website dashboard</h1>
+        <p>Enter your password to edit the site.</p>
+        <label>
+          Password
+          <input type="password" id="password" autocomplete="current-password" required />
+        </label>
+        <button class="btn btn-primary" type="submit" id="login-btn">Sign in</button>
+        <p class="login-error" id="login-error" hidden></p>
+        <p class="login-note" id="login-note"></p>
+      </form>
+    </div>
+
+    <!-- --------------------------------------------------------- app -->
+    <div class="app" id="app" hidden>
+      <header class="topbar">
+        <div class="topbar-left">
+          <img src="../assets/chi-logo-header.webp" alt="" width="420" height="406" />
+          <div>
+            <strong>Website dashboard</strong>
+            <span id="save-state">All changes saved</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="btn btn-ghost" type="button" id="btn-preview-toggle">Hide preview</button>
+          <button class="btn btn-ghost" type="button" id="btn-revert">Undo changes</button>
+          <button class="btn btn-primary" type="button" id="btn-save" disabled>Save &amp; publish</button>
+          <button class="btn btn-quiet" type="button" id="btn-logout">Sign out</button>
+        </div>
+      </header>
+
+      <div class="layout">
+        <nav class="sidebar" id="sidebar" aria-label="Sections"></nav>
+
+        <main class="editor" id="editor"></main>
+
+        <aside class="preview" id="preview">
+          <div class="preview-bar">
+            <span>Live preview</span>
+            <div class="preview-sizes">
+              <button type="button" data-size="desktop" class="active">Desktop</button>
+              <button type="button" data-size="mobile">Mobile</button>
+            </div>
+            <a href="../" target="_blank" rel="noopener">Open site ↗</a>
+          </div>
+          <div class="preview-frame-wrap" id="frame-wrap">
+            <iframe id="preview-frame" src="../index.html" title="Live preview of the website"></iframe>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" hidden></div>
+  </body>
+</html>

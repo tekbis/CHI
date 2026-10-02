@@ -7,7 +7,12 @@
     <meta name="theme-color" content="#071d36" />
     <title>Schedule an Inspection | CHI Comprehensive Home Inspections</title>
     <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="preload" as="image" href="../assets/chi-logo-header.webp" />
     <link rel="stylesheet" href="../assets/styles.css" />
+    <link rel="prefetch" href="../" as="document" />
+    <script src="../assets/cms-config.js" defer></script>
+    <script src="../assets/cms-map.js" defer></script>
+    <script src="../assets/cms.js" defer></script>
     <script src="../assets/app.js" defer></script>
   </head>
   <body data-page="schedule">
@@ -24,7 +29,7 @@
       </div>
       <div class="container header-main">
         <a class="brand" href="../" aria-label="CHI Comprehensive Home Inspections home">
-          <span class="brand-image-wrap"><img src="../assets/chi-logo-transparent-v2.webp" alt="CHI Comprehensive Home Inspections" /></span>
+          <span class="brand-image-wrap"><img src="../assets/chi-logo-header.webp" alt="CHI Comprehensive Home Inspections" width="420" height="406" fetchpriority="high" decoding="async" /></span>
         </a>
 
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
@@ -230,7 +235,7 @@
     </main>
 
     <footer class="site-footer compact-footer">
-      <div class="container footer-bottom"><p>© <span data-year></span> CHI Comprehensive Home Inspections. All rights reserved.</p><p><a href="../">Home</a> · Serving MD, PA, DC &amp; WV</p></div>
+      <div class="container footer-bottom"><p>© <span data-year></span> CHI Comprehensive Home Inspections. All rights reserved.</p><a href="/admin">Dashboard</a><p><a href="../">Home</a> · Serving MD, PA, DC &amp; WV</p></div>
     </footer>
 
     <a class="mobile-call-bar" href="tel:+13017886608"><span>Call CHI</span><strong>301-788-6608</strong></a>
