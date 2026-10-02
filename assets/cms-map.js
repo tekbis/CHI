@@ -53,7 +53,7 @@
       label: "Page title & SEO",
       icon: "search",
       fields: [
-        { path: "seo.title", label: "Browser tab title", type: "text", sel: ["title"] },
+        { path: "seo.title", label: "Browser tab title", type: "text", skipEmpty: true, sel: ["title"] },
         { path: "seo.description", label: "Search description", type: "attr", attr: "content",
           multiline: true, sel: ['meta[name="description"]'] }
       ]
@@ -67,7 +67,9 @@
       fields: [
         { path: "hero.overline", label: "Small line above heading", type: "text", sel: [".hero-overline"] },
         { path: "hero.title", label: "Main heading", type: "html", multiline: true,
-          hint: "Wrap the light-blue part in <em>…</em>", sel: [".hero-copy h1"] },
+          format: "accent-last-line",
+          hint: "Put each line on its own row. The last line keeps the original light-blue style.",
+          sel: [".hero-copy h1"] },
         { path: "hero.subline", label: "Sub-heading", type: "text", sel: [".hero-subline"] },
         { path: "hero.lede", label: "Intro paragraph", type: "text", multiline: true, sel: [".hero-lede"] },
         { path: "hero.btnPrimary", label: "Green button text", type: "text", sel: [".hero-buttons .button-lime"] },
@@ -187,7 +189,9 @@
       page: "home",
       fields: [
         { path: "why.eyebrow", label: "Small label", type: "text", sel: [".why-intro .eyebrow"], keepFirstChild: true },
-        { path: "why.title", label: "Heading", type: "html", hint: "Use <br /> for a line break", sel: [".why-intro h2"] },
+        { path: "why.title", label: "Heading", type: "html", format: "line-breaks",
+          hint: "Press Enter for a line break. The heading style stays the same.",
+          sel: [".why-intro h2"] },
         { path: "why.intro", label: "Intro paragraph", type: "text", multiline: true, sel: [".why-intro > p:not(.eyebrow)"] },
         { path: "why.bigNumber", label: "Big number", type: "text", sel: [".experience-display strong"] },
         { path: "why.bigLabel", label: "Big number label", type: "text", sel: [".experience-display span"] }

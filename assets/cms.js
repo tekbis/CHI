@@ -80,8 +80,30 @@
            field.keepUntilStrong || field.keepYearSpan;
   }
 
+  /* The designed headings are not one flat line. The hero's last line sits in
+     <em> (lighter, on its own row). Other headings use <br> for a line break.
+     Editors type plain lines; this puts that markup back so a dashboard edit
+     keeps the original style instead of replacing it with unstyled text. */
+  function formatValue(format, value) {
+    var raw = String(value);
+    if (format === "accent-last-line") {
+      if (/<\s*em\b/i.test(raw)) return raw.replace(/\r?\n/g, "<br>");
+      var lines = raw.split(/\r?\n/).map(function (s) { return s.trim(); }).filter(function (s) { return s !== ""; });
+      if (lines.length < 2) return escapeHtml(lines[0] || "");
+      var accent = lines.pop();
+      return lines.map(escapeHtml).join("<br>") + "<em>" + escapeHtml(accent) + "</em>";
+    }
+    if (format === "line-breaks") {
+      if (/<br\s*\/?>/i.test(raw)) return raw;
+      return escapeHtml(raw).replace(/\r?\n/g, "<br>");
+    }
+    return raw;
+  }
+
   function applyField(field, value) {
     if (value === undefined || value === null) return;
+    if (field.skipEmpty && String(value).trim() === "") return;
+    if (field.format) value = formatValue(field.format, value);
     var sels = Array.isArray(field.sel) ? field.sel : [field.sel];
 
     sels.forEach(function (sel) {

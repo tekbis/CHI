@@ -200,6 +200,23 @@
     return wrap;
   }
 
+  /* Show designed markup as plain lines in the editor. What gets saved is the
+     text the user typed; the site puts the original <em> / <br> style back. */
+  function editorText(format, value) {
+    var raw = String(value);
+    if (format === "accent-last-line") {
+      var em = raw.match(/<em>([\s\S]*?)<\/em>/i);
+      if (!em) return raw;
+      var before = raw.replace(/<em>[\s\S]*?<\/em>/i, " ").replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "");
+      before = before.split(/\n/).map(function (s) { return s.trim(); }).filter(Boolean).join("\n");
+      return (before + "\n" + em[1].replace(/<[^>]+>/g, "").trim()).trim();
+    }
+    if (format === "line-breaks") {
+      return raw.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "");
+    }
+    return raw;
+  }
+
   function onEdit(path, value) {
     set(state.content, path, value);
     markDirty(true);
@@ -211,7 +228,7 @@
     var el = document.createElement(def.multiline ? "textarea" : "input");
     if (!def.multiline) el.type = "text";
     var current = get(state.content, path);
-    el.value = current === undefined || current === null ? "" : current;
+    el.value = current === undefined || current === null ? "" : editorText(def.format, current);
     el.addEventListener("input", function () { onEdit(path, el.value); });
     wrap.appendChild(el);
     if (wrap._hint) wrap.appendChild(wrap._hint);
@@ -562,16 +579,41 @@
     });
   }
 
+  /* A first save can store only the fields that were typed. Lay the full
+     designed copy underneath so those edits stay, and everything else keeps
+     the original wording instead of coming back blank. */
+  function mergeContent(base, over) {
+    if (Array.isArray(base)) return Array.isArray(over) && over.length ? over : base;
+    if (!base || typeof base !== "object") {
+      return over === undefined || over === null || over === "" ? base : over;
+    }
+    var out = {};
+    var keys = Object.keys(base);
+    if (over && typeof over === "object" && !Array.isArray(over)) {
+      Object.keys(over).forEach(function (k) {
+        if (keys.indexOf(k) === -1) keys.push(k);
+      });
+    }
+    keys.forEach(function (k) {
+      var o = over ? over[k] : undefined;
+      if (o === undefined || o === null || o === "") out[k] = base[k];
+      else out[k] = mergeContent(base[k], o);
+    });
+    return out;
+  }
+
   function boot(token) {
     state.token = token;
     sessionStorage.setItem(TOKEN_KEY, token);
     loadContent()
       .then(function (content) {
-        /* First run: the table is empty, so seed the editor from the content
-           currently baked into the site. Nothing is written until Save. */
-        if (content) return content;
-        toast("Starting from the current website content");
-        return loadDefaults();
+        return loadDefaults().then(function (defaults) {
+          if (!content) {
+            toast("Starting from the current website content");
+            return defaults;
+          }
+          return mergeContent(defaults, content);
+        });
       })
       .then(startApp)
       .catch(function (err) {
